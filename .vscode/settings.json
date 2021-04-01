@@ -2,6 +2,9 @@
   "editor.formatOnType": true,
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
-  "prettier.singleQuote": true
+  "prettier.singleQuote": true,
+  "cSpell.words": [
+    "valueobjects"
+  ]
   // "[typescript]": {}
 }
