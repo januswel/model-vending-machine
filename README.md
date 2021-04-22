@@ -12,4 +12,5 @@
   - usecase
   - gateway
     - repository: 永続層アクセス
-- 1ファイル１ユースケース
+- 1 ファイル 1 ユースケース
+- Entity が持つ id プロパティのフォーマットは UUID v4 とする
