@@ -1,59 +1,69 @@
-import { buildListDrinkAvailableForPurchase } from './list-drink-available-for-purchase';
+import {
+  buildListDrinkAvailableForPurchase,
+  ListDrinkAvailableForPurchase,
+} from './list-drink-available-for-purchase';
 import * as Money from '../domain/valueobjects/money';
-import { DrinkRepository } from './';
-import { Drink } from '../domain/valueobjects/drink';
-
-export class DrinkRepositoryDummy implements DrinkRepository {
-  #items = [
-    {
-      price: 100,
-      drink: new Drink('water'),
-    },
-    {
-      price: 120,
-      drink: new Drink('coffee'),
-    },
-  ];
-
-  getAvailableDrinksFor(total: number): Drink[] {
-    return this.#items
-      .filter((item) => item.price <= total)
-      .map((item) => item.drink);
-  }
-}
+import { ItemRepository } from './';
+import { Item } from '../domain/entities/item';
 
 describe('listDrinkAvailableForPurchase', () => {
-  it('returns nothing when user passed 80 yen', () => {
-    /* const repoGetAvailableDrinksForSpy = jest
-      .spyOn(DrinkRepositoryDummy.prototype, 'getAvailableDrinksFor')
-      .mockReturnValue([]); */
+  describe('for repository', () => {
+    describe('getAvailableItemsFor', () => {
+      it('returns an array from injected repository', () => {
+        const expected = [
+          new Item({
+            drinkName: 'water',
+            price: 100,
+          }),
+        ];
 
-    expect(
-      buildListDrinkAvailableForPurchase(new DrinkRepositoryDummy())([
-        new Money.FiftyYenCoin(),
-        new Money.TenYenCoin(),
-        new Money.TenYenCoin(),
-        new Money.TenYenCoin(),
-      ])
-    ).toEqual([]);
-    //expect(repoGetAvailableDrinksForSpy).toHaveBeenCalled();
-  });
+        const repository = {
+          getAvailableItemsFor(total: number) {
+            return expected;
+          },
+        };
+        const usecase = buildListDrinkAvailableForPurchase(repository);
+        const actual = usecase([new Money.FiftyYenCoin()]);
+        expect(actual).toEqual(expected);
+      });
 
-  it('returns waters when user passed 100 yen', () => {
-    expect(
-      buildListDrinkAvailableForPurchase(new DrinkRepositoryDummy())([
-        new Money.HundredYenCoin(),
-      ])
-    ).toEqual([new Drink('water')]);
-  });
+      describe('arguments', () => {
+        let usecase: ListDrinkAvailableForPurchase;
+        let spy: any;
+        beforeEach(() => {
+          const repository = {
+            getAvailableItemsFor(total: number) {
+              return [];
+            },
+          };
+          spy = jest.spyOn(repository, 'getAvailableItemsFor');
+          usecase = buildListDrinkAvailableForPurchase(repository);
+        });
 
-  it('returns waters and coffees when user passed 120 yen', () => {
-    expect(
-      buildListDrinkAvailableForPurchase(new DrinkRepositoryDummy())([
-        new Money.HundredYenCoin(),
-        new Money.TenYenCoin(),
-        new Money.TenYenCoin(),
-      ])
-    ).toEqual([new Drink('water'), new Drink('coffee')]);
+        it('returns nothing when user passed 80 yen', () => {
+          usecase([
+            new Money.FiftyYenCoin(),
+            new Money.TenYenCoin(),
+            new Money.TenYenCoin(),
+            new Money.TenYenCoin(),
+          ]);
+          expect(spy).toHaveBeenCalledWith(80);
+        });
+
+        it('returns waters when user passed 100 yen', () => {
+          usecase([new Money.HundredYenCoin()]);
+          expect(spy).toHaveBeenCalledWith(100);
+        });
+
+        it('returns waters and coffees when user passed 120 yen', () => {
+          usecase([
+            new Money.HundredYenCoin(),
+            new Money.TenYenCoin(),
+            new Money.TenYenCoin(),
+          ]);
+          expect(spy).toHaveBeenCalledWith(120);
+        });
+      });
+    });
   });
 });

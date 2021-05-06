@@ -47,6 +47,13 @@
     - 同じ`drink`の配列を返しても意味がないので
   - ボタンが押された Drink を返却する usecase を作成する
 
+## 2021.05.06
+
+- やったこと
+  - `list-drink-available-for-purchase` のテストをほしかったものに変更
+- やること
+  - ボタンが押された Drink を返却する usecase を作成する
+
 ## めも
 
 - value object とは？

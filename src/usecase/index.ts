@@ -1,1 +1,1 @@
-export { DrinkRepository } from './repositories/drink';
+export { ItemRepository } from './repositories/item';
