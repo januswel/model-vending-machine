@@ -3,8 +3,8 @@ import {
   ListDrinkAvailableForPurchase,
 } from './list-drink-available-for-purchase';
 import * as Money from '../domain/valueobjects/money';
-import { ItemRepository } from './';
 import { Item } from '../domain/entities/item';
+import { ItemRepository } from './';
 
 describe('listDrinkAvailableForPurchase', () => {
   describe('for repository', () => {
@@ -17,9 +17,12 @@ describe('listDrinkAvailableForPurchase', () => {
           }),
         ];
 
-        const repository = {
+        const repository: ItemRepository = {
           getAvailableItemsFor(total: number) {
             return expected;
+          },
+          getItem(itemId: string): Item {
+            return {} as Item;
           },
         };
         const usecase = buildListDrinkAvailableForPurchase(repository);
