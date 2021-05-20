@@ -8,11 +8,11 @@ describe('purchaseDrink', () => {
     describe('getItem', () => {
       it('returns item from injected repository', () => {
         const dummyItemId = 'dummyId';
-        // TODO: idを採番せずにインスタンス化する方法が必要
         const expected = new Item({
           id: dummyItemId,
           drinkName: 'water',
           price: 100,
+          stock: 1,
         });
 
         const repository: ItemRepository = {

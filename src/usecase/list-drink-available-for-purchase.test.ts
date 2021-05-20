@@ -12,8 +12,10 @@ describe('listDrinkAvailableForPurchase', () => {
       it('returns an array from injected repository', () => {
         const expected = [
           new Item({
+            id: '1',
             drinkName: 'water',
             price: 100,
+            stock: 1,
           }),
         ];
 
@@ -37,6 +39,9 @@ describe('listDrinkAvailableForPurchase', () => {
           const repository = {
             getAvailableItemsFor(total: number) {
               return [];
+            },
+            getItem(itemId: string): Item {
+              return {} as Item;
             },
           };
           spy = jest.spyOn(repository, 'getAvailableItemsFor');

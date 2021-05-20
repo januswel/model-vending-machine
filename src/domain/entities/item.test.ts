@@ -7,21 +7,15 @@ describe('Item', () => {
 
     beforeEach(() => {
       item = new Item({
+        id: '1',
         price: 100,
         drinkName: 'name',
+        stock: 1,
       });
     });
 
-    it('should have "id" property and its format is UUID v4', () => {
-      expect(item.id).toMatch(/^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/);
-    });
-
-    it('should have "id" property that is unique', () => {
-      const anotherItem = new Item({
-        price: 100,
-        drinkName: 'name',
-      });
-      expect(item.id).not.toBe(anotherItem.id);
+    it('should have "id" property and its value is "1"', () => {
+      expect(item.id).toBe('1');
     });
 
     it('should have "price" property and its value is 100', () => {
@@ -30,6 +24,10 @@ describe('Item', () => {
 
     it('should have "drink" property and it is an instance of Drink with provided name', () => {
       expect(item.drink.name).toBe('name');
+    });
+
+    it('should have "stock" property and it its value is 1', () => {
+      expect(item.stock).toBe(1);
     });
   });
 });
