@@ -1,17 +1,17 @@
 import { AllMoneyKind } from '../domain/valueobjects/money';
 import { Item } from '../domain/entities/item';
 import { ItemRepository } from './';
+import { InputAmountRepository } from './repositories/input-amount';
 
 export type ListDrinkAvailableForPurchase = (money: AllMoneyKind[]) => Item[];
 
 export const buildListDrinkAvailableForPurchase =
-  (ItemRepository: ItemRepository): ListDrinkAvailableForPurchase =>
+  (
+    itemRepository: ItemRepository,
+    inputAmountRepository: InputAmountRepository
+  ): ListDrinkAvailableForPurchase =>
   (money: AllMoneyKind[]): Item[] => {
-    const total = money
-      .map((m) => m.valueOf())
-      .reduce((sum, current) => {
-        return sum + current;
-      }, 0);
+    inputAmountRepository.add(money);
 
-    return ItemRepository.getAvailableItemsFor(total);
+    return itemRepository.getAvailableItemsFor(total);
   };
